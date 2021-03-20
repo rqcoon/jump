@@ -1,6 +1,9 @@
 # jump
 a single file terminal game written in C **without** ncurses
 
+# game
+you can jump using `j` and quit using `q`
+
 # compile
 the game can be compiled with
 ```bash
