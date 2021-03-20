@@ -1,3 +1,4 @@
+//rqcoon, 20/3/21
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -10,8 +11,7 @@ void game();
 int jump = 0;
 int xco = 20;
 int yco = 1;
-int spike_xco = 255;
-int spike2_xco = 322;
+int spike_xco[5] = {0,0,0,0,0};
 int score = 0;
 
 int main() {
@@ -47,17 +47,13 @@ bool kbhit()
     return byteswaiting > 0;
 }
 
-int newrand(void) {
-	return rand() % 100;
-}
-
 void game(){
 	struct winsize ts;
 	ioctl(STDIN_FILENO, TIOCGWINSZ, &ts);
 	int cols = ts.ws_col;
 	int lines = ts.ws_row;
 
-	system("stty cbreak -echo");
+	system("stty cbreak -echo"); //yes, I know this is a horrible solution
 	if (kbhit()) {
 		int ch = getch();
 
@@ -67,7 +63,15 @@ void game(){
 			exit(0);
 		}
 	}
-	system("stty cooked echo");	
+	system("stty cooked echo"); //and that I shouldn't run system() if i want to make this portable at all
+	
+	
+	for (int i=0; i < 5; i++) {
+		if (spike_xco[i] < 0) {
+			spike_xco[i] = (rand() % cols) + cols - 1;
+		}
+	}
+	
 
 	if (jump > 0 && !(score % 2)) {
 		jump -= 1;
@@ -79,33 +83,16 @@ void game(){
 	}
 
 	printf("score:%d\n",score);
-	for(int i=1; i<(lines-9); i++,printf("\n"));	//print the nothing
-	/* The nothing takes up almost the entire screen, minus the bottom 8 lines. This gives us 8 lines for the ground and the play "area" 
+	for(int i=1; i<(lines-9); i++,printf("\n"));
+	/* Blankness takes up almost the entire screen, minus the bottom 8 lines. This gives us 8 lines for the ground and the play "area" 
 	 Because I have chosen to make the ground 3 lines, this gives me 5 lines where the game will occur*/
-	
-
-	if (spike_xco > 1) {
-		spike_xco -= 2;
-	} else if (rand()%5 == 3) {
-	spike_xco = cols - 1 + rand() % 100;
-	}
-
-	if (spike2_xco > 1) {
-		spike2_xco -= 2;
-	} else {
-		spike2_xco = cols - 1 + newrand() % 100;
-	}
 
 	for(int i=0;i<cols*5;i++) {
 		if (i == xco + cols*(5-yco)) {
 			printf("\033[1;32m");
 			printf("@");
 			printf("\033[0m");
-		} else if (i == (spike_xco + cols*4)){
-			printf("\033[1;31m");
-			printf("$");
-			printf("\033[0m");
-		} else if (i == (spike2_xco + cols*4)){
+		} else if (i == spike_xco[0] + cols*4 || i == spike_xco[1] + cols*4 || i == spike_xco[2] + cols*4 || i == spike_xco[3] + cols*4 || i == spike_xco[4] + cols*4){ //yes, I know
 			printf("\033[1;31m");
 			printf("$");
 			printf("\033[0m");
@@ -123,11 +110,16 @@ void game(){
 			printf("#\n");
 		}
 	}
-	score++;
 
-	if (yco == 1 && (spike_xco == 20 || spike2_xco == 20 || spike_xco == 21 || spike2_xco == 21)) {
-		printf("game over, score: %d\n", score-1);
-		exit(0);
+	for (int i=0;i<5;i++) {
+		if (spike_xco[i] == xco && yco == 1) {
+			printf("game over, score: %d\n",score);
+			exit(0);
+		}
 	}
-	
+
+	score++;
+	for (int i = 0; i < 5; i++) {
+		spike_xco[i] -= 1;
+	}
 }
