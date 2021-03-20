@@ -1,22 +1,22 @@
 # jump
 a single file terminal game written in C **without** ncurses
 
-> game
+**game**
 
-you can jump using `j` and quit using `q`
+> you can jump using `j` and quit using `q`
 
-> compile
+**compile**
 
-the game can be compiled with
+> the game can be compiled with
 ```bash
 gcc -o jump jump.c
 ```
-and you can install it or do whatever
+> and you can install it or do whatever
 
-> why do you not use ncurses?
+**why do you not use ncurses?**
 
-i do not give a fuck!!
+> i do not give a fuck!!
 
-> is this very poorly written?
+**is this very poorly written?**
 
-yes
+> yes
