@@ -11,12 +11,12 @@ int jump = 0;
 int xco = 20;
 int yco = 1;
 int spike_xco = 255;
-int spike2_xco = 424;
+int spike2_xco = 322;
 int score = 0;
 
 int main() {
 	while (1) {
-		usleep(50000);
+		usleep(53000);
 		system("clear");
 		game();
 	}
@@ -69,10 +69,10 @@ void game(){
 	}
 	system("stty cooked echo");	
 
-	if (jump > 0) {
-		yco += 1;
+	if (jump > 0 && !(score % 2)) {
 		jump -= 1;
-	} else if (yco != 1) {
+		yco += 1; 
+	} else if (yco != 1 && jump != 3 && !(score % 2)) {
 		yco -= 1;
 	} else if (yco > 3) {
 		yco = 3;
@@ -85,24 +85,30 @@ void game(){
 	
 
 	if (spike_xco > 1) {
-		spike_xco -= 1;
+		spike_xco -= 2;
 	} else if (rand()%5 == 3) {
 	spike_xco = cols - 1 + rand() % 100;
 	}
 
 	if (spike2_xco > 1) {
-		spike2_xco -= 1;
+		spike2_xco -= 2;
 	} else {
 		spike2_xco = cols - 1 + newrand() % 100;
 	}
 
 	for(int i=0;i<cols*5;i++) {
 		if (i == xco + cols*(5-yco)) {
+			printf("\033[1;32m");
 			printf("@");
+			printf("\033[0m");
 		} else if (i == (spike_xco + cols*4)){
-			printf("$");	
-		} else if (i == (spike2_xco + cols*4)){
+			printf("\033[1;31m");
 			printf("$");
+			printf("\033[0m");
+		} else if (i == (spike2_xco + cols*4)){
+			printf("\033[1;31m");
+			printf("$");
+			printf("\033[0m");
 		} else if (i<(cols*5)-1) {
 			printf(" ");
 		} else {
@@ -119,7 +125,7 @@ void game(){
 	}
 	score++;
 
-	if (yco == 1 && spike_xco == 20 || yco == 1 && spike2_xco == 20) {
+	if (yco == 1 && (spike_xco == 20 || spike2_xco == 20 || spike_xco == 21 || spike2_xco == 21)) {
 		printf("game over, score: %d\n", score-1);
 		exit(0);
 	}
