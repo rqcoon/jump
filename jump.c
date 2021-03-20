@@ -112,7 +112,7 @@ void game(){
 	}
 
 	for (int i=0;i<5;i++) {
-		if (spike_xco[i] == xco && yco == 1) {
+		if ((spike_xco[i] == xco || spike_xco[i] == xco + 1) && yco == 1) {
 			printf("game over, score: %d\n",score);
 			exit(0);
 		}
@@ -120,6 +120,6 @@ void game(){
 
 	score++;
 	for (int i = 0; i < 5; i++) {
-		spike_xco[i] -= 1;
+		spike_xco[i] -= 2;
 	}
 }
