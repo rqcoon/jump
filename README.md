@@ -13,3 +13,6 @@ and you can install it or do whatever
 
 # why do you not use ncurses?
 i do not give a fuck!!
+
+# is this very poorly written
+yes
