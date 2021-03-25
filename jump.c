@@ -17,7 +17,7 @@ int score = 0;
 int main() {
 	while (1) {
 		usleep(53000);
-		system("clear");
+		//system("clear");
 		game();
 	}
 	system("clear");
@@ -60,6 +60,7 @@ void game(){
 		if (ch == 'j' && yco == 1) {
 		       	jump = 3;
 		} else if (ch == 'q') {
+			system("clear");
 			exit(0);
 		}
 	}
@@ -113,6 +114,7 @@ void game(){
 
 	for (int i=0;i<5;i++) {
 		if ((spike_xco[i] == xco || spike_xco[i] == xco + 1) && yco == 1) {
+			system("clear");
 			printf("game over, score: %d\n",score);
 			exit(0);
 		}
